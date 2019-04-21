@@ -15,7 +15,7 @@
 
 ## 安装 Docker 与 Docker Compose
 
-本项目基于 CentOS 7 构建，安装 Docker 环境参考[官网](https://docs.docker.com/install/linux/docker-ce/centos/)。国内环境，推荐使用[阿里云Docker Hub加速器](https://cr.console.aliyun.com/#/accelerator)服务。
+本项目基于 CentOS 7 构建，安装 Docker 环境参考 [官网](https://docs.docker.com/install/linux/docker-ce/centos/)。国内环境，推荐使用 [阿里云Docker Hub加速器](https://cr.console.aliyun.com/#/accelerator) 服务。
 
 ```bash
 $ sudo mkdir -p /etc/docker
@@ -28,7 +28,7 @@ $ sudo systemctl daemon-reload
 $ sudo systemctl restart docker
 ```
 
-推荐[Github官网](https://github.com/docker/compose/releases)安装Docker Compose。
+推荐 [Github官网](https://github.com/docker/compose/releases) 安装 Docker Compose。
 
 ```bash
 $ curl -L https://github.com/docker/compose/releases/download/1.13.0/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
@@ -41,7 +41,7 @@ $ chmod +x /usr/local/bin/docker-compose
 1. 克隆 Git 仓库。需要提前安装好 Git。
 
    ```shell
-   $ git clone https://github.com/bravist/lnmp-docker && cd lnmp-docker
+   $ git clone git@github.com:liujin0506/laravel-docker.git && cd laravel-docker
    ```
 
 
@@ -134,7 +134,7 @@ $ chmod +x /usr/local/bin/docker-compose
 
      ```
 
-     要在本地主机上访问a.com，需要在hosts文件中添加域名指向。
+     要在本地主机上访问 a.com，需要在 hosts 文件中添加域名指向。
 
 6. 使用 Docker Compose 快速启动容器。
 
