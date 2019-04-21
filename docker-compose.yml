@@ -1,0 +1,129 @@
+version: '2.1'
+services:
+  ### Nginx Web Container #######################################
+  nginx:
+    build: ./nginx
+    container_name: lnmp-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    #source code container
+    volumes_from:
+      - www
+    volumes:
+      - "./nginx/logs:/var/log/nginx"
+      - "./nginx/socket:/var/run"
+    links:
+      - php-fpm:php-fpm
+    networks:
+      web_server_network:
+        ipv4_address: ${NGINX_WEB_SERVER_IP}
+
+  ### PHP-FPM Container #######################################
+  php-fpm:
+    image: liujin0506/alpine-php7-fpm
+    container_name: lnmp-php-fpm
+      #source code container
+    volumes_from:
+      - www
+    volumes:
+      - "./nginx/logs/php-fpm:/usr/local/var/log/php7"
+      - "./nginx/socket:/var/run"
+    links:
+      - mysql
+      - redis
+    #https://github.com/laradock/laradock/issues/435
+    extra_hosts:
+      - "${PHP_FPM_DOMAIN}:${NGINX_WEB_SERVER_IP}"
+      - "${PHP_FPM_DOMAIN2}:${NGINX_WEB_SERVER_IP}"
+      - "${PHP_FPM_DOMAIN3}:${NGINX_WEB_SERVER_IP}"
+      - "${PHP_FPM_DOMAIN4}:${NGINX_WEB_SERVER_IP}"
+      - "${PHP_FPM_DOMAIN5}:${NGINX_WEB_SERVER_IP}"
+    env_file:
+      - .env
+    networks:
+      - web_server_network
+
+  ### PHP-SUPERVISOR Container #######################################
+  php-supervisor:
+    build: ./php-supervisor
+    container_name: lnmp-php-supervisor
+    volumes:
+      - ./php-supervisor/supervisor/log:/var/log/supervisor
+      - ./php-supervisor/supervisor:/etc/supervisor/conf.d
+    volumes_from:
+       - www
+    links:
+      - mysql
+      - redis
+    extra_hosts:
+      - "${SUPERVISOR_DOMAIN}:${NGINX_WEB_SERVER_IP}"
+      - "${SUPERVISOR_DOMAIN2}:${NGINX_WEB_SERVER_IP}"
+      - "${SUPERVISOR_DOMAIN3}:${NGINX_WEB_SERVER_IP}"
+      - "${SUPERVISOR_DOMAIN4}:${NGINX_WEB_SERVER_IP}"
+      - "${SUPERVISOR_DOMAIN5}:${NGINX_WEB_SERVER_IP}"
+    env_file:
+      - .env
+    networks:
+      - web_server_network
+
+  ### PHP-CROND Container #######################################
+  php-crond:
+    build: ./php-crond
+    container_name: lnmp-php-crond
+    volumes_from:
+      - "www"
+    volumes:
+      - "./php-crond/crontabs:/var/log/cron"
+    networks:
+      - web_server_network
+
+  ### MySQL Container #######################################
+  # MySQL - One of the most popular database servers. Made by the original developers of MySQL. Guaranteed to stay open source.
+  mysql:
+    image: mysql:5.7.21
+    container_name: lnmp-mysql
+    ports:
+      - "3306:3306"
+    volumes:
+      # NOTE: your data will be stored in ./mysql
+      - ./mysql/data/mysql:/var/lib/mysql
+    environment:
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+    env_file:
+      - .env
+    networks:
+      - web_server_network
+
+  ### REDIS Container #######################################
+  redis:
+    build: ./redis
+    container_name: lnmp-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - "./redis/data:/data"
+    environment:
+      - REDIS_PASSWORD=developer
+    networks:
+      - web_server_network
+
+  ### Web-Root Container #######################################
+  www:
+    image: tianon/true
+    container_name: lnmp-www
+    volumes:
+      - ./www:/data/www
+
+### Networks Setup ############################################
+networks:
+  web_server_network:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+      - subnet: "${WEB_SERVER_SUBNET}"
+        gateway: "${WEB_SERVER_GATEWAY}"
