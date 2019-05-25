@@ -7,6 +7,7 @@ RUN mkdir -p /etc/nginx/cert \
 	&& mkdir -p /etc/nginx/conf.d
 
 COPY ./nginx.conf /etc/nginx/nginx.conf
+COPY ./enable-php.conf /etc/nginx/enable-php.conf
 COPY ./conf.d/ /etc/nginx/conf.d/
 COPY ./cert/ /etc/nginx/cert/
 

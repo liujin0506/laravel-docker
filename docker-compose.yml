@@ -11,34 +11,45 @@ services:
     volumes_from:
       - www
     volumes:
-      - "./nginx/logs:/var/log/nginx"
-      - "./nginx/socket:/var/run"
+      - ./nginx/logs:/var/log/nginx
+      - ./nginx/socket:/var/run
     links:
       - php-fpm:php-fpm
+    extra_hosts:
+      - "${DOMAIN}:${NGINX_WEB_SERVER_IP}"
+      - "${DOMAIN2}:${NGINX_WEB_SERVER_IP}"
+      - "${DOMAIN3}:${NGINX_WEB_SERVER_IP}"
+      - "${DOMAIN4}:${NGINX_WEB_SERVER_IP}"
+      - "${DOMAIN5}:${NGINX_WEB_SERVER_IP}"
     networks:
       web_server_network:
         ipv4_address: ${NGINX_WEB_SERVER_IP}
 
   ### PHP-FPM Container #######################################
   php-fpm:
-    image: liujin0506/alpine-php7-fpm
+    build: ./php-fpm
     container_name: lnmp-php-fpm
       #source code container
     volumes_from:
       - www
     volumes:
-      - "./nginx/logs/php-fpm:/usr/local/var/log/php7"
-      - "./nginx/socket:/var/run"
+      - ./nginx/logs/php-fpm:/usr/local/var/log/php7
+      - ./nginx/socket:/var/run
     links:
       - mysql
       - redis
     #https://github.com/laradock/laradock/issues/435
     extra_hosts:
-      - "${PHP_FPM_DOMAIN}:${NGINX_WEB_SERVER_IP}"
-      - "${PHP_FPM_DOMAIN2}:${NGINX_WEB_SERVER_IP}"
-      - "${PHP_FPM_DOMAIN3}:${NGINX_WEB_SERVER_IP}"
-      - "${PHP_FPM_DOMAIN4}:${NGINX_WEB_SERVER_IP}"
-      - "${PHP_FPM_DOMAIN5}:${NGINX_WEB_SERVER_IP}"
+      - "${DOMAIN}:${NGINX_WEB_SERVER_IP}"
+      - "${DOMAIN2}:${NGINX_WEB_SERVER_IP}"
+      - "${DOMAIN3}:${NGINX_WEB_SERVER_IP}"
+      - "${DOMAIN4}:${NGINX_WEB_SERVER_IP}"
+      - "${DOMAIN5}:${NGINX_WEB_SERVER_IP}"
+      - "${DOMAIN6}:${NGINX_WEB_SERVER_IP}"
+      - "${DOMAIN7}:${NGINX_WEB_SERVER_IP}"
+      - "${DOMAIN8}:${NGINX_WEB_SERVER_IP}"
+      - cmdev.addnewer.com:192.168.0.35
+      - cmtest.addnewer.com:192.168.0.35
     env_file:
       - .env
     networks:
@@ -57,11 +68,16 @@ services:
       - mysql
       - redis
     extra_hosts:
-      - "${SUPERVISOR_DOMAIN}:${NGINX_WEB_SERVER_IP}"
-      - "${SUPERVISOR_DOMAIN2}:${NGINX_WEB_SERVER_IP}"
-      - "${SUPERVISOR_DOMAIN3}:${NGINX_WEB_SERVER_IP}"
-      - "${SUPERVISOR_DOMAIN4}:${NGINX_WEB_SERVER_IP}"
-      - "${SUPERVISOR_DOMAIN5}:${NGINX_WEB_SERVER_IP}"
+      - "${DOMAIN}:${NGINX_WEB_SERVER_IP}"
+      - "${DOMAIN2}:${NGINX_WEB_SERVER_IP}"
+      - "${DOMAIN3}:${NGINX_WEB_SERVER_IP}"
+      - "${DOMAIN4}:${NGINX_WEB_SERVER_IP}"
+      - "${DOMAIN5}:${NGINX_WEB_SERVER_IP}"
+      - "${DOMAIN6}:${NGINX_WEB_SERVER_IP}"
+      - "${DOMAIN7}:${NGINX_WEB_SERVER_IP}"
+      - "${DOMAIN8}:${NGINX_WEB_SERVER_IP}"
+      - cmdev.addnewer.com:192.168.0.35
+      - cmtest.addnewer.com:192.168.0.35
     env_file:
       - .env
     networks:
@@ -74,7 +90,21 @@ services:
     volumes_from:
       - "www"
     volumes:
-      - "./php-crond/crontabs:/var/log/cron"
+      - ./php-crond/crontabs:/var/log/cron
+    links:
+      - mysql
+      - redis
+    extra_hosts:
+      - "${DOMAIN}:${NGINX_WEB_SERVER_IP}"
+      - "${DOMAIN2}:${NGINX_WEB_SERVER_IP}"
+      - "${DOMAIN3}:${NGINX_WEB_SERVER_IP}"
+      - "${DOMAIN4}:${NGINX_WEB_SERVER_IP}"
+      - "${DOMAIN5}:${NGINX_WEB_SERVER_IP}"
+      - "${DOMAIN6}:${NGINX_WEB_SERVER_IP}"
+      - "${DOMAIN7}:${NGINX_WEB_SERVER_IP}"
+      - "${DOMAIN8}:${NGINX_WEB_SERVER_IP}"
+      - cmdev.addnewer.com:192.168.0.35
+      - cmtest.addnewer.com:192.168.0.35
     networks:
       - web_server_network
 
@@ -105,7 +135,7 @@ services:
     ports:
       - "6379:6379"
     volumes:
-      - "./redis/data:/data"
+      - ./redis/data:/data
     environment:
       - REDIS_PASSWORD=developer
     networks:
