@@ -2,9 +2,4 @@
 !.gitignore
 !adminlocal.addnewer.com.conf
 !amlocal.addnewer.com.conf
-!cmlocal.addnewer.com.conf
-!local.am.com.conf
-!local.amcontrol.com.conf
-!local.cm.com.conf
-!local.dsc.com.conf
-!portallocal.addnewer.com.conf
+!rmlocal.addnewer.com.conf

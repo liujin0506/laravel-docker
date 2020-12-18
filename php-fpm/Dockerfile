@@ -1,4 +1,4 @@
-FROM liujin0506/alpine-php7:latest
+FROM liujin0506/alpine-php7:v1.0
 
 MAINTAINER liujing <liujing@addnewer.com>
 
@@ -29,14 +29,15 @@ RUN mkdir -p /usr/share/nginx/html \
 	&& mkdir -p /usr/local/var/log/php7 \
 	&& mkdir -p /usr/local/var/log/php7 \
 	&& mkdir -p /usr/local/var/run \
-	&& mkdir -p /data/www
+	&& mkdir -p /data/www \
+	&& mkdir -p /data/reachmax_logs
 
 COPY ./php-fpm.conf /etc/php7/
 
 COPY ./www.conf /etc/php7/php-fpm.d/
 
 # Expose volumes
-VOLUME ["/usr/share/nginx/html", "/usr/local/var/log/php7", "/var/run/", "/data/www"]
+VOLUME ["/usr/share/nginx/html", "/usr/local/var/log/php7", "/var/run/", "/data/www", "/data/reachmax_logs"]
 
 WORKDIR /data/www
 

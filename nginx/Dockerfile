@@ -1,4 +1,4 @@
-FROM nginx:1.13.1-alpine
+FROM nginx:1.19.6-alpine
 
 MAINTAINER liujing <liujing@addnewer.com>
 

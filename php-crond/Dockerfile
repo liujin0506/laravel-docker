@@ -1,4 +1,4 @@
-FROM liujin0506/alpine-php7:latest
+FROM liujin0506/alpine-php7:v1.0
 
 MAINTAINER liujing <liujing@addnewer.com>
 

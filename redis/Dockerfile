@@ -1,4 +1,4 @@
-FROM redis:4.0.11-alpine
+FROM redis:6.0.9-alpine
 
 MAINTAINER liujing <liujing@addnewer.com>
 

@@ -21,6 +21,8 @@ services:
       - "${DOMAIN3}:${NGINX_WEB_SERVER_IP}"
       - "${DOMAIN4}:${NGINX_WEB_SERVER_IP}"
       - "${DOMAIN5}:${NGINX_WEB_SERVER_IP}"
+      - "${DOMAIN6}:${NGINX_WEB_SERVER_IP}"
+      - "${DOMAIN7}:${NGINX_WEB_SERVER_IP}"
     networks:
       web_server_network:
         ipv4_address: ${NGINX_WEB_SERVER_IP}
@@ -47,71 +49,15 @@ services:
       - "${DOMAIN5}:${NGINX_WEB_SERVER_IP}"
       - "${DOMAIN6}:${NGINX_WEB_SERVER_IP}"
       - "${DOMAIN7}:${NGINX_WEB_SERVER_IP}"
-      - "${DOMAIN8}:${NGINX_WEB_SERVER_IP}"
-      - cmdev.addnewer.com:192.168.0.35
-      - cmtest.addnewer.com:192.168.0.35
     env_file:
       - .env
-    networks:
-      - web_server_network
-
-  ### PHP-SUPERVISOR Container #######################################
-  php-supervisor:
-    build: ./php-supervisor
-    container_name: lnmp-php-supervisor
-    volumes:
-      - ./php-supervisor/supervisor/log:/var/log/supervisor
-      - ./php-supervisor/supervisor:/etc/supervisor/conf.d
-    volumes_from:
-       - www
-    links:
-      - mysql
-      - redis
-    extra_hosts:
-      - "${DOMAIN}:${NGINX_WEB_SERVER_IP}"
-      - "${DOMAIN2}:${NGINX_WEB_SERVER_IP}"
-      - "${DOMAIN3}:${NGINX_WEB_SERVER_IP}"
-      - "${DOMAIN4}:${NGINX_WEB_SERVER_IP}"
-      - "${DOMAIN5}:${NGINX_WEB_SERVER_IP}"
-      - "${DOMAIN6}:${NGINX_WEB_SERVER_IP}"
-      - "${DOMAIN7}:${NGINX_WEB_SERVER_IP}"
-      - "${DOMAIN8}:${NGINX_WEB_SERVER_IP}"
-      - cmdev.addnewer.com:192.168.0.35
-      - cmtest.addnewer.com:192.168.0.35
-    env_file:
-      - .env
-    networks:
-      - web_server_network
-
-  ### PHP-CROND Container #######################################
-  php-crond:
-    build: ./php-crond
-    container_name: lnmp-php-crond
-    volumes_from:
-      - "www"
-    volumes:
-      - ./php-crond/crontabs:/var/log/cron
-    links:
-      - mysql
-      - redis
-    extra_hosts:
-      - "${DOMAIN}:${NGINX_WEB_SERVER_IP}"
-      - "${DOMAIN2}:${NGINX_WEB_SERVER_IP}"
-      - "${DOMAIN3}:${NGINX_WEB_SERVER_IP}"
-      - "${DOMAIN4}:${NGINX_WEB_SERVER_IP}"
-      - "${DOMAIN5}:${NGINX_WEB_SERVER_IP}"
-      - "${DOMAIN6}:${NGINX_WEB_SERVER_IP}"
-      - "${DOMAIN7}:${NGINX_WEB_SERVER_IP}"
-      - "${DOMAIN8}:${NGINX_WEB_SERVER_IP}"
-      - cmdev.addnewer.com:192.168.0.35
-      - cmtest.addnewer.com:192.168.0.35
     networks:
       - web_server_network
 
   ### MySQL Container #######################################
   # MySQL - One of the most popular database servers. Made by the original developers of MySQL. Guaranteed to stay open source.
   mysql:
-    image: mysql:5.7.21
+    image: mysql:8.0.22
     container_name: lnmp-mysql
     ports:
       - "3306:3306"
@@ -147,6 +93,7 @@ services:
     container_name: lnmp-www
     volumes:
       - ./www:/data/www
+      - ./logs:/data/reachmax_logs
 
 ### Networks Setup ############################################
 networks:
